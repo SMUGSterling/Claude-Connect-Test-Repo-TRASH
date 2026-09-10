@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'self'; script-src 'self'"
+    />
+    <title>Passive-Aggressive RAM Monitor</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <span class="titlebar-name">RAM MONITOR</span>
+      <button id="close" class="titlebar-close" aria-label="Close">&times;</button>
+    </header>
+
+    <main>
+      <div class="gauge">
+        <svg viewBox="0 0 220 220" aria-hidden="true">
+          <path class="gauge-track" d="M 46.36 173.64 A 90 90 0 1 1 173.64 173.64" />
+          <path id="gauge-fill" class="gauge-fill" d="M 46.36 173.64 A 90 90 0 1 1 173.64 173.64" />
+        </svg>
+        <div class="gauge-readout">
+          <output id="value">—</output>
+          <span class="gauge-unit">MB</span>
+        </div>
+      </div>
+
+      <p class="caption">Memory Consumed by This Exact Window</p>
+
+      <p id="status" class="status">Booting up. Give me a second to get comfortable.</p>
+
+      <button id="optimize" class="optimize">Optimize Memory</button>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

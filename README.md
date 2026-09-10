@@ -15,14 +15,17 @@ It's a small system-tray-style dashboard that watches its own memory footprint, 
 
 ## How it works
 
-- **Main process** polls `process.memoryUsage()` (and/or `process.getProcessMemoryInfo()`) on an interval and pushes readings to the renderer over IPC.
-- **Renderer** draws the live dial and cycles the insult copy on a timer.
-- **"Optimize Memory"** triggers `child_process.spawn()` on a detached background script that allocates and holds a large memory buffer, deliberately inflating reported usage — then flips the button label to `Oops.`
+- **Main process** sums `app.getAppMetrics()` across every Electron process once a second and pushes the total to the renderer over IPC. The number is real: main, renderer, GPU, utility processes, and the optimizer if you've launched it.
+- **Renderer** draws the dial, colors it by severity (green → amber → red), and rotates the commentary on a timer.
+- **"Optimize Memory"** spawns `src/hog.js` via `process.execPath` with `ELECTRON_RUN_AS_NODE=1`, so a packaged build doesn't need Node on `PATH`. The child allocates roughly the app's current footprint in 32 MB buffers, reports its own RSS back over stdout, and the button becomes `Oops.`
+- **The optimizer dirties one byte per 4 KB page** every half second. Untouched anonymous pages get reclaimed or swapped under memory pressure, and a memory hog whose memory usage drifts back down isn't much of a memory hog.
+
+Measured behavior: ~440 MB at rest, ~980 MB after one click, and it stays there.
 
 ## Tech stack
 
-- [Electron](https://www.electronjs.org/)
-- Vanilla HTML/CSS/JS (no framework needed for a dial and some snark)
+- [Electron](https://www.electronjs.org/) 38
+- Vanilla HTML/CSS/JS. No framework — it's a dial and some insults.
 
 ## Getting started
 
@@ -31,10 +34,19 @@ npm install
 npm start
 ```
 
-## Project status
+## Project structure
 
-Concept / early scaffold. The joke works best if the app is exactly as bloated as it claims to be.
+```
+src/
+  main.js              window, memory sampling, IPC, child process
+  preload.js           contextBridge surface (no node in the renderer)
+  hog.js               the "optimizer"
+  renderer/
+    index.html
+    styles.css
+    renderer.js        dial rendering + message rotation
+```
 
 ## License
 
-See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
