@@ -4,10 +4,21 @@
   "description": "An Electron app that monitors its own RAM usage and judges you for it.",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --linux AppImage"
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "^38.2.2"
+    "electron": "^38.2.2",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "edu.smu.guildhall.passive-aggressive-ram-monitor",
+    "productName": "Passive-Aggressive RAM Monitor",
+    "files": ["src/**/*", "package.json"],
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Utility"
+    }
   }
 }

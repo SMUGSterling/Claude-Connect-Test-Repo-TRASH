@@ -29,10 +29,37 @@ Measured behavior: ~440 MB at rest, ~980 MB after one click, and it stays there.
 
 ## Getting started
 
+For development (runs from source, requires Node):
+
 ```bash
 npm install
 npm start
 ```
+
+### Building a standalone app
+
+To get a real double-click-able app that doesn't need Node or `npm` to run:
+
+```bash
+npm install
+npm run dist
+```
+
+This produces `dist/Passive-Aggressive RAM Monitor-1.0.0.AppImage` — a single self-contained executable for Linux. Make it executable and run it directly:
+
+```bash
+chmod +x "dist/Passive-Aggressive RAM Monitor-1.0.0.AppImage"
+"dist/Passive-Aggressive RAM Monitor-1.0.0.AppImage"
+```
+
+AppImages need FUSE to run in place (most desktop Linux installs already have it: `sudo apt install libfuse2` on Debian/Ubuntu if not). No FUSE, or running inside a minimal container? Extract and run instead:
+
+```bash
+"dist/Passive-Aggressive RAM Monitor-1.0.0.AppImage" --appimage-extract
+./squashfs-root/passive-aggressive-ram-monitor
+```
+
+If your environment also lacks a working sandbox (a `chrome-sandbox` permission error), append `--no-sandbox` to either run command above.
 
 ## Project structure
 
