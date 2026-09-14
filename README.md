@@ -1,4 +1,4 @@
-# The Passive-Aggressive RAM Monitor
+# The Passive-Aggressive RAM Monitor (PARM)
 
 An Electron app that monitors its own RAM usage and judges you for it.
 
